@@ -16,6 +16,7 @@ import {
 	withSelect,
 } from '@wordpress/data';
 import {
+	__experimentalInputControl as InputControl,
 	KeyboardShortcuts,
 	PanelBody,
 	Popover,
@@ -189,21 +190,21 @@ function NavigationLinkEdit( {
 	}, [ isSelected ] );
 
 	// If the LinkControl popover is open and the URL has changed, close the LinkControl and focus the label text.
-	useEffect( () => {
-		if ( isLinkOpen && url ) {
-			// Does this look like a URL and have something TLD-ish?
-			if (
-				isURL( prependHTTP( label ) ) &&
-				/^.+\.[a-z]+/.test( label )
-			) {
-				// Focus and select the label text.
-				selectLabelText();
-			} else {
-				// Focus it (but do not select).
-				placeCaretAtHorizontalEdge( ref.current, true );
-			}
-		}
-	}, [ url ] );
+	// useEffect( () => {
+	// 	if ( isLinkOpen && url ) {
+	// 		// Does this look like a URL and have something TLD-ish?
+	// 		if (
+	// 			isURL( prependHTTP( label ) ) &&
+	// 			/^.+\.[a-z]+/.test( label )
+	// 		) {
+	// 			// Focus and select the label text.
+	// 			selectLabelText();
+	// 		} else {
+	// 			// Focus it (but do not select).
+	// 			placeCaretAtHorizontalEdge( ref.current, true );
+	// 		}
+	// 	}
+	// }, [ url ] );
 
 	/**
 	 * Focus the Link label text and select it.
@@ -259,6 +260,7 @@ function NavigationLinkEdit( {
 			[ `has-${ textColor }-color` ]: !! textColor,
 			'has-background': rgbBackgroundColor,
 			[ `has-${ backgroundColor }-background-color` ]: !! backgroundColor,
+			'is-missing-link': ! url,
 		} ),
 		style: {
 			color: rgbTextColor,
@@ -372,13 +374,31 @@ function NavigationLinkEdit( {
 							'core/image',
 							'core/strikethrough',
 						] }
+						onClick={ () => {
+							if ( ! url ) {
+								setIsLinkOpen( true );
+							}
+						} }
 					/>
 					{ isLinkOpen && (
 						<Popover
 							position="bottom center"
 							onClose={ () => setIsLinkOpen( false ) }
+							className="wp-block-navigation-link__popover-link-input"
 						>
-							<LinkControl
+							<InputControl
+								label={ __( 'Text' ) }
+								onChange={ ( label ) =>
+									setAttributes( { label } )
+								}
+							/>
+							<InputControl
+								label={ __( 'URL' ) }
+								onChange={ ( url ) =>
+									setAttributes( { url: encodeURI( url ) } )
+								}
+							/>
+							{ /* <LinkControl
 								className="wp-block-navigation-link__inline-link-input"
 								value={ link }
 								showInitialSuggestions={ true }
@@ -387,12 +407,10 @@ function NavigationLinkEdit( {
 								createSuggestionButtonText={ ( searchTerm ) => {
 									let format;
 									if ( type === 'post' ) {
-										/* translators: %s: search term. */
 										format = __(
 											'Create draft post: <mark>%s</mark>'
 										);
 									} else {
-										/* translators: %s: search term. */
 										format = __(
 											'Create draft page: <mark>%s</mark>'
 										);
@@ -439,7 +457,7 @@ function NavigationLinkEdit( {
 										id,
 									} )
 								}
-							/>
+							/> */ }
 						</Popover>
 					) }
 				</div>
