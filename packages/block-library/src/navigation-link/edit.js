@@ -297,6 +297,24 @@ function NavigationLinkEdit( {
 		'wp-block-navigation-link__placeholder': ! url,
 	} );
 
+	let missingText = '';
+	switch ( type ) {
+		case 'post':
+			missingText = __( 'Missing Post' );
+			break;
+		case 'page':
+			missingText = __( 'Missing Page' );
+			break;
+		case 'category':
+			missingText = __( 'Missing Category' );
+			break;
+		case 'tag':
+			missingText = __( 'Missing Tag' );
+			break;
+		default:
+			missingText = __( 'Missing URL' );
+	}
+
 	return (
 		<Fragment>
 			<BlockControls>
@@ -357,7 +375,7 @@ function NavigationLinkEdit( {
 				<div className={ classes }>
 					{ ! url ? (
 						<div className="wp-block-navigation-link__placeholder-text">
-							{ __( 'Missing URL' ) }
+							{ missingText }
 						</div>
 					) : (
 						<RichText
