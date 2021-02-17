@@ -1,4 +1,12 @@
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
 import { CSSProperties } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import { FlexProps } from '../flex/types';
 
 export type HStackAlignment =
@@ -92,32 +100,3 @@ export type Props = Omit< FlexProps, 'align' | 'gap' > & {
 	 */
 	spacing?: CSSProperties[ 'width' ];
 };
-
-/**
- * `HStack` (Horizontal Stack) arranges child elements in a horizontal line.
- *
- * @remarks
- * `HStack` can render anything inside.
- *
- * @example
- * ```jsx
- * import { HStack, Text, View } from `@wp-g2/components`
- * import { ui } from `@wp-g2/styles`
- *
- * function Example() {
- *   return (
- *     <HStack>
- *       <View css={[ui.background.blue]}>
- *         <Text>Ana</Text>
- *       </View>
- *       <View css={[ui.background.blue]}>
- *         <Text>Elsa</Text>
- *       </View>
- *       <View css={[ui.background.blue]}>
- *         <Text>Olaf</Text>
- *       </View>
- *     </HStack>
- *   );
- * }
- * ```
- */
