@@ -11,19 +11,18 @@ import { useHStack } from './hook';
  *
  * @example
  * ```jsx
- * import { HStack, Text, View } from `@wp-g2/components`
- * import { ui } from `@wp-g2/styles`
+ * import { HStack, Text, View } from `@wordpress/components/ui`
  *
  * function Example() {
  *   return (
  *     <HStack>
- *       <View css={[ui.background.blue]}>
+ *       <View>
  *         <Text>Ana</Text>
  *       </View>
- *       <View css={[ui.background.blue]}>
+ *       <View>
  *         <Text>Elsa</Text>
  *       </View>
- *       <View css={[ui.background.blue]}>
+ *       <View>
  *         <Text>Olaf</Text>
  *       </View>
  *     </HStack>
