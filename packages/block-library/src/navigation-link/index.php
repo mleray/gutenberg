@@ -233,10 +233,49 @@ function render_block_core_navigation_link( $attributes, $content, $block ) {
  * @throws WP_Error An WP_Error exception parsing the block definition.
  */
 function register_block_core_navigation_link() {
+
+	// TODO: what about icons, description, title, isActive?
+	$post_types   = get_post_types( array( 'show_in_nav_menus' => true ), 'objects' );
+	$taxonomies   = get_taxonomies( array( 'show_in_nav_menus' => true ), 'objects' );
+	$variations   = array();
+	$variations[] = array(
+		'name'        => 'link',
+		'isDefault'   => true, //TODO: not sure if we transform nested properties correctly (snake to camel)
+		'title'       => __( 'Link' ),
+		'description' => __( 'A link to a URL.' ),
+		'attributes'  => array(),
+	);
+	if ( $post_types ) {
+		foreach ( $post_types as $post_type ) {
+			$variations[] = array(
+				'name'       => $post_type->name,
+				'title'      => $post_type->labels->menu_name,
+				'attributes' => array(
+					'type'       => $post_type->name,
+					'objectType' => 'post-type',
+				),
+			);
+		}
+	}
+	if ( $taxonomies ) {
+		foreach ( $taxonomies as $taxonomy ) {
+			$name         = $taxonomy->name === 'post_tag' ? 'tag' : $taxonomy->name;
+			$variations[] = array(
+				'name'       => $name,
+				'title'      => $taxonomy->labels->menu_name,
+				'attributes' => array(
+					'type'       => $name,
+					'objectType' => 'taxonomy',
+				),
+			);
+		}
+	}
+
 	register_block_type_from_metadata(
 		__DIR__ . '/navigation-link',
 		array(
 			'render_callback' => 'render_block_core_navigation_link',
+			'variations'      => $variations,
 		)
 	);
 }
